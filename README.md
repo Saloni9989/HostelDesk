@@ -1,2 +1,1 @@
-# HostelDesk
-A smart complaint management system with OTP login, real-time tracking, and admin dashboard.
+HostelDesk is a full-stack web application built to streamline complaint handling in hostels and colleges. It features secure OTP-based authentication, complaint categorization, priority management, and real-time status updates, improving communication between students and administration.
