@@ -20,13 +20,18 @@ app.use(morgan('dev'));
 
 // ── Security ─────────────────────────────────────────────────
 app.use(helmet());
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+].filter(Boolean);
+
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (curl, Postman) and any localhost port in dev
-    if (!origin || /^http:\/\/localhost:\d+$/.test(origin) || origin === process.env.FRONTEND_URL) {
-      return cb(null, true);
-    }
-    cb(new Error('Not allowed by CORS'));
+    if (!origin) return cb(null, true); // curl / Postman / Render health checks
+    if (/^http:\/\/localhost:\d+$/.test(origin)) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    cb(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
 }));
